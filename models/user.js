@@ -1,73 +1,70 @@
 const mongoose = require('mongoose');
-const validator = require('validator')
+const validator = require('validator');
 const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
 
+const userSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: [true, 'Please fill the name field'],
+  },
 
-const userschema = new mongoose.Schema({
-    nam: {
-        type : String,
-        required: [true, 'Please fill the name field']
+  email: {
+    type: String,
+    required: [true, 'Please fill the email field'],
+    unique: true,
+    lowercase: true,
+    validate: [validator.isEmail, 'Please provide a vald email address'],
+  },
+
+  photo: {
+    type: String,
+    default: 'default.jpg',
+  },
+
+  role: {
+    type: String,
+    enum: ['admin', 'customers', 'staff'],
+    default: 'customers',
+  },
+
+  password: {
+    type: String,
+    required: [true, 'Please fill the password field'],
+    minlength: 8,
+    select: false,
+  },
+
+  confirmPassword: {
+    type: String,
+    required: [true, 'Please fill the password field'],
+    minlength: 8,
+    validate: {
+      validator: function (el) {
+        return el === this.password;
+      },
+      message: 'Password is not the same',
     },
+  },
 
-    email: {
-        type: String,
-        required: [true, 'Please fill the email field'],
-        unique: true,
-        lowercase: true,
-        validate: [validator.isEmail, 'Please provide a vald email address']
-    },
-
-    photo: {
-        type: String,
-        default: 'default.jpg'
-    },
-
-    role: {
-        type: String,
-        enum:['admin', 'customers', 'staff'],
-        default:'user'
-    },
-
-    password:{
-        type: String,
-        required: [true, 'Please fill the password field'],
-        minlength: 8,
-        select: false
-    },
-
-    confirmPassword:{
-				type: String,
-				required: [true, 'Please fill the password field'],
-				minlength: 8,
-				validate: {
-					validator: function(el) {
-						return el === this.password;
-					},
-					message: 'Password is not the same'
-				}
-		},
-
-		passwordChangedAt: Date,
-		passwordResetToken: String,
-		passwordResetExpires: Date,
-		active: {
-			type:Boolean,
-			default:true,
-			select: false
-		}
-		
-
+  passwordChangedAt: Date,
+  passwordResetToken: String,
+  passwordResetExpires: Date,
+  active: {
+    type: Boolean,
+    default: true,
+    select: false,
+  },
 });
 
-userschema.pre('save', async function (next) {
-	if (!this.isModified('password')) return next();
+userSchema.pre('save', async function (next) {
+  if (!this.isModified('password')) return next();
 
-	this.password = await bcrypt.hash(this.password, 12);
+  this.password = await bcrypt.hash(this.password, 12);
 
-	this.confirmPassword = undefined;
-	next()
-})
+  this.confirmPassword = undefined;
+  next();
+});
 
 userSchema.pre(/^find/, function (next) {
   this.find({ active: { $ne: false } });

@@ -1,5 +1,6 @@
 const express = require('express');
 const foodController = require('../controllers/foodController');
+const authController = require('../controllers/authController');
 
 const router = express.Router();
 
@@ -12,5 +13,17 @@ router
     foodController.createFood
   );
 
-router.route('/:id').get(foodController.getFood).patch(foodController.updateFood).delete(foodController.deleteFood);
+router
+  .route('/:id')
+  .get(foodController.getFood)
+  .patch(
+    authController.protect,
+    authController.restrictTo('admin'),
+    foodController.updateFood
+  )
+  .delete(
+    authController.protect,
+    authController.restrictTo('admin'),
+    foodController.deleteFood
+  );
 module.exports = router;
