@@ -8,6 +8,7 @@ const rateLimit = require('express-rate-limit');
 const sanitize = require('express-mongo-sanitize');
 const foodRouter = require('./routes/foodRoutes');
 const userRouter = require('./routes/userRoutes');
+const categoryRouter = require('./routes/categoryRoutes');
 const globalErrorHandler = require('./controllers/errorController');
 
 const app = express();
@@ -55,6 +56,7 @@ app.use(xss());
 
 app.use('/api/v1/foods', foodRouter);
 app.use('/api/v1/users', userRouter);
+app.use('/api/v1/categories', categoryRouter);
 
 app.use(globalErrorHandler);
 

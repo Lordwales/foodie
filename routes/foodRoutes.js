@@ -8,6 +8,8 @@ router
   .route('/')
   .get(foodController.getAllFoods)
   .post(
+    authController.protect,
+    authController.restrictTo('admin', 'staff'),
     foodController.uploadFoodImages,
     foodController.resizeFoodImages,
     foodController.createFood
