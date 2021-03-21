@@ -63,7 +63,7 @@ exports.resizeFoodImages = catchAsync(async (req, res, next) => {
 });
 
 exports.createFood = factory.createOne(Food);
-exports.getFood = factory.getOne(Food);
+exports.getFood = factory.getOne(Food, { path: 'reviews' });
 exports.updateFood = factory.updateOne(Food);
 exports.getAllFoods = factory.getAll(Food);
 exports.deleteFood = factory.deleteOne(Food);

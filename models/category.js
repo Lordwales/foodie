@@ -32,5 +32,12 @@ categorySchema.pre('save', function (next) {
   next();
 });
 
+categorySchema.pre('/^find/', function (next) {
+  this.populate({
+    path: 'food',
+    select: 'name price imageCover',
+  });
+});
+
 const Category = mongoose.model('Category', categorySchema);
 module.exports = Category;

@@ -46,7 +46,7 @@ exports.resizeCoverImage = catchAsync(async (req, res, next) => {
 });
 
 exports.createCategory = factory.createOne(Category);
-exports.getCategory = factory.getOne(Category);
+exports.getCategory = factory.getOne(Category, { path: 'food' });
 exports.updateCategory = factory.updateOne(Category);
 exports.getAllCategories = factory.getAll(Category);
 exports.deleteCategory = factory.deleteOne(Category);
