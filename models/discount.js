@@ -17,7 +17,7 @@ const discountSchema = new mongoose.Schema({
   discountType: {
     type: String,
     default: 'fixed',
-    enum: ['Point', 'percentage'],
+    enum: ['fixed', 'percentage'],
   },
 
   expireDate: {
