@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const Food = require('Food');
+const Food = require('./food');
 
 const reviewSchema = new mongoose.Schema(
   {
@@ -49,6 +49,8 @@ reviewSchema.pre(/^find/, function (next) {
     path: 'user',
     select: 'user photo',
   });
+
+  next();
 });
 
 reviewSchema.statics.calcAverageRatings = async function (foodId) {

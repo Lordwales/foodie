@@ -10,7 +10,7 @@ const discountSchema = new mongoose.Schema({
   },
 
   value: {
-    type: [Number, String],
+    type: Number,
     required: [true, 'A discount must have a value'],
   },
 
@@ -20,9 +20,13 @@ const discountSchema = new mongoose.Schema({
     enum: ['fixed', 'percentage'],
   },
 
+  productMinQuantity: {
+    type: Number,
+  },
+
   expireDate: {
     type: Date,
-    maxlength: [40, 'A discount must have expiring Date'],
+    required: [true, 'A discount must have expiring Date'],
   },
 
   createdAt: {
@@ -31,3 +35,6 @@ const discountSchema = new mongoose.Schema({
     select: false,
   },
 });
+
+const Discount = mongoose.model('Discount', discountSchema);
+module.exports = Discount;
